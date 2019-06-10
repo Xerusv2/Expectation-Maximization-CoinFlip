@@ -1,0 +1,51 @@
+class Main {
+
+  private static double factorial(double f) {
+    if (f == 1) {
+      return 1;
+    }
+    return f * factorial(f-1);
+  }
+
+  private static double biDistribution(double n, double x, double theta) {
+    double p = 0;
+    double q = 1 - theta;
+    p = factorial(n) / (factorial(x)*factorial(n-x))*Math.pow(theta,x)*Math.pow(q,(n-x));
+    return p;
+  }
+  
+  public static void main(String[] args) {
+    double thetaA = .60;
+    double thetaB = .50;
+    double probHeadA = 0;
+    double probHeadB = 0;
+    double probTailA = 0;
+    double probTailB = 0;
+    int flips = 10;
+    double heads[] = {5,9,8,4,7};
+    for (int k = 0; k < 10; k++) {
+      probHeadA = 0;
+      probHeadB = 0;
+      probTailA = 0;
+      probTailB = 0;
+      for (int i = 0; i < 5; i++) {
+        double a = biDistribution(flips, heads[i], thetaA);
+        double b = biDistribution(flips, heads[i], thetaB);
+
+        a = a/(a+b);
+        b = 1-a;
+        probHeadA += a * heads[i];
+        probHeadB += b * heads[i];
+        probTailA += a * (10 - heads[i]);
+        probTailB += b * (10 - heads[i]);      
+        System.out.println("Probability for coin a:" + a);
+        System.out.println("Probability for coin b:" + b);
+      }
+      thetaA = probHeadA/(probHeadA + probTailA);
+      thetaB = probHeadB/(probHeadB + probTailB);
+      System.out.println("Iteration: " + k);
+      System.out.println("Theta A is: " + thetaA);
+      System.out.println("Theta B is: " + thetaB);
+    }
+  }
+}
